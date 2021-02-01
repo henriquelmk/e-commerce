@@ -3,5 +3,28 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <ul>
+        <!--{% for listing in listings %}
+            <li><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></li>
+            {% if listing.price %}
+                <li>{{ listing.price }}</li>
+            {% else %}
+                <li>{{ listing.initial_bid }}</li>
+            {% endif %}
+            <li>{{ listing }}</li>
+            <li>{{ bids }}</li>
+        {% endfor %}
+
+        {% for listing in listings %}
+            <li>{{ listing.title }}</li>
+            <li>{{ listing.auction_listing.all }}</li>
+        {% endfor %}-->
+
+        {% for bid in bids %}
+            <li>{{ bid.auction_listing__max }}</li>
+        {% endfor %}
+
+        <li>{{ bids.price__max }}</li>
+
+    </ul>
 {% endblock %}

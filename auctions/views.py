@@ -4,11 +4,26 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from django.db.models import Max
+
 from .models import *
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.all()
+    #bids = Bid.objects.all().aggregate(Max("price"))
+    #bids = Bid.objects.all().filter(title="Keyboard").aggregate(Max("price"))
+    return render(request, "auctions/index.html", {
+        "listings": listings,
+        "bids": bids
+    })
+
+
+def listing(request, listing_id):
+    listing = Listing.objects.get(id=listing_id)
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
 
 
 def login_view(request):
@@ -73,7 +88,7 @@ def create_listing(request):
         user = User.objects.get(pk=request.user.id)
 
         # Attempt to create new listing
-        listing = Product(title=product, description=description, initial_bid=bid, category=category, image_url=url, user=user)
+        listing = Listing(title=product, description=description, initial_bid=bid, category=category, image_url=url, user=user)
         listing.save()
         return HttpResponseRedirect(reverse("index"))
     else:
